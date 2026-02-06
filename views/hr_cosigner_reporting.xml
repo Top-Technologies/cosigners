@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Reporting List View -->
+        <record id="view_hr_cosigner_report_tree" model="ir.ui.view">
+            <field name="name">hr.cosigner.report.list</field>
+            <field name="model">hr.cosigner</field>
+            <field name="arch" type="xml">
+                <list string="Cosigner Analysis" expand="1">
+                    <field name="employee_id" widget="many2one_avatar"/>
+                    <field name="name"/>
+                    <field name="phone"/>
+                    <field name="work_type"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Search View for Reporting (Inherit existing or create new?) 
+             Using existing search view but adding Action context for default GroupBy -->
+
+        <!-- Reporting Action -->
+        <record id="action_hr_cosigner_report_all" model="ir.actions.act_window">
+            <field name="name">Cosigner Report</field>
+            <field name="res_model">hr.cosigner</field>
+            <field name="view_mode">list,pivot</field>
+            <field name="view_id" ref="view_hr_cosigner_report_tree"/>
+            <field name="context">{'search_default_group_by_employee': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No cosigners found to report on.
+                </p>
+            </field>
+        </record>
+
+        <!-- Menu Item -->
+        <menuitem
+            id="menu_hr_cosigner_report_ui"
+            name="Cosigner Report"
+            parent="hr.hr_menu_hr_reports"
+            action="action_hr_cosigner_report_all"
+            sequence="20"/>
+
+    </data>
+</odoo>

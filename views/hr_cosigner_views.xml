@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Cosigner Form View - Employee Profile Style -->
+    <record id="hr_cosigner_view_form" model="ir.ui.view">
+        <field name="name">hr.cosigner.form</field>
+        <field name="model">hr.cosigner</field>
+        <field name="arch" type="xml">
+            <form string="Cosigner">
+                <sheet>
+                    <field name="active" invisible="1"/>
+                    <field name="image_1920" widget="image" class="oe_avatar" options="{'preview_image': 'image_128'}"/>
+                    <div class="oe_title">
+                        <label for="name" string="Cosigner Name"/>
+                        <h1>
+                            <field name="name" placeholder="Full Name" required="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="phone" widget="phone"/>
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="signing_date"/>
+                        </group>
+                        <group>
+                            <field name="company_id" readonly="1" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Documents" name="documents">
+                            <field name="attachment_ids" widget="many2many_binary" string="Attachments"/>
+                            <group>
+                                <field name="notes" placeholder="Additional notes about this cosigner..."/>
+                            </group>
+                        </page>
+                        <page string="Private Information" name="private_information">
+                            <!-- Living Address Section -->
+                            <group string="Living Address">
+                                <group>
+                                    <field name="woreda"/>
+                                    <field name="house_number"/>
+                                    <field name="city"/>
+                                </group>
+                                <group>
+                                    <field name="country_id" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="state_id" options="{'no_create': True, 'no_open': True}"/>
+                                </group>
+                            </group>
+                            <separator/>
+                            <!-- Work Information Section -->
+                            <group string="Work Information">
+                                <group>
+                                    <field name="work_type"/>
+                                    <field name="work_field"/>
+                                    <field name="working_company_name"/>
+                                </group>
+                                <group>
+                                    <field name="company_found_city" string="Company City"/>
+                                    <field name="company_found_state" string="Company State"/>
+                                </group>
+                            </group>
+                            <separator/>
+                            <!-- Financial Information Section -->
+                            <group string="Financial Information">
+                                <group>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="monthly_wage"/>
+                                    <field name="amount_given"/>
+                                    <field name="purpose_of_guarantee"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Cosigner List View -->
+    <record id="hr_cosigner_view_list" model="ir.ui.view">
+        <field name="name">hr.cosigner.list</field>
+        <field name="model">hr.cosigner</field>
+        <field name="arch" type="xml">
+            <list string="Cosigners">
+                <field name="image_128" widget="image" string=" " class="oe_avatar"/>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="employee_id"/>
+                <field name="signing_date"/>
+                <field name="attachment_count" string="Documents"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Cosigner Kanban View -->
+    <record id="hr_cosigner_view_kanban" model="ir.ui.view">
+        <field name="name">hr.cosigner.kanban</field>
+        <field name="model">hr.cosigner</field>
+        <field name="arch" type="xml">
+            <kanban class="o_hr_employee_kanban">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="image_128"/>
+                <field name="signing_date"/>
+                <templates>
+                    <t t-name="card">
+                        <aside>
+                            <field name="image_128" widget="image" class="rounded"/>
+                        </aside>
+                        <main>
+                            <field name="name" class="fw-bold fs-4"/>
+                            <field name="phone" widget="phone"/>
+                            <span t-if="record.signing_date.value" class="text-muted">
+                                Signed: <field name="signing_date"/>
+                            </span>
+                        </main>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Cosigner Search View -->
+    <record id="hr_cosigner_view_search" model="ir.ui.view">
+        <field name="name">hr.cosigner.search</field>
+        <field name="model">hr.cosigner</field>
+        <field name="arch" type="xml">
+            <search string="Search Cosigners">
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="employee_id"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="group_by_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Company" name="group_by_company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Cosigner Action -->
+    <record id="hr_cosigner_action" model="ir.actions.act_window">
+        <field name="name">Cosigners</field>
+        <field name="res_model">hr.cosigner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="hr_cosigner_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new cosigner
+            </p>
+            <p>
+                Cosigners are individuals linked to employees for reference purposes.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Item under Employees -->
+    <menuitem
+        id="menu_hr_cosigner"
+        name="Cosigners"
+        parent="hr.menu_hr_employee_payroll"
+        action="hr_cosigner_action"
+        sequence="20"/>
+
+</odoo>

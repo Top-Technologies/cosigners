@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Server Action for opening cosigners -->
+    <record id="action_open_employee_cosigners" model="ir.actions.act_window">
+        <field name="name">Cosigners</field>
+        <field name="res_model">hr.cosigner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('employee_id', '=', active_id)]</field>
+        <field name="context">{'default_employee_id': active_id}</field>
+    </record>
+
+    <!-- Add Cosigner Smart Button to Employee Form -->
+    <record id="hr_employee_view_form_inherit_cosigner" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.cosigner</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <!-- Add smart button in button_box -->
+            <div name="button_box" position="inside">
+                <button name="%(action_open_employee_cosigners)d"
+                    class="oe_stat_button"
+                    icon="fa-users"
+                    type="action"
+                    groups="hr.group_hr_user">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value"><field name="cosigner_count"/></span>
+                        <span class="o_stat_text">Cosigners</span>
+                    </div>
+                </button>
+            </div>
+            <!-- Add Cosigners tab in notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Cosigners" name="cosigners" groups="hr.group_hr_user">
+                    <field name="cosigner_ids" mode="list,kanban">
+                        <list string="Cosigners" editable="bottom">
+                            <field name="name"/>
+                            <field name="phone"/>
+                            <field name="woreda" string="Woreda"/>
+                            <field name="city"/>
+                            <field name="work_type"/>
+                            <field name="working_company_name"/>
+                            <field name="monthly_wage"/>
+                            <field name="amount_given"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
