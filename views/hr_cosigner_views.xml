@@ -57,6 +57,7 @@
                                 <group>
                                     <field name="company_found_city" string="Company City"/>
                                     <field name="company_found_state" string="Company State"/>
+                                    <field name="phone_number"/>
                                 </group>
                             </group>
                             <separator/>
