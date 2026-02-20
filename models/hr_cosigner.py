@@ -59,7 +59,7 @@ class HrCosigner(models.Model):
     # Living Address
     woreda = fields.Char(string="Woreda")
     house_number = fields.Char(string='House Number', tracking=True)
-    city = fields.Char(string='City', tracking=True)
+    city = fields.Char(string='Sub-City', tracking=True)
     state_id = fields.Many2one(
         'res.country.state',
         string='State',
@@ -79,8 +79,9 @@ class HrCosigner(models.Model):
     ], string='Type of Employment', tracking=True)
     work_field = fields.Char(string='Job Title', tracking=True)
     working_company_name = fields.Char(string='Working Company Name', tracking=True)
-    company_found_city = fields.Char(string='Company City', tracking=True)
+    company_found_city = fields.Char(string='Company Sub-City', tracking=True)
     company_found_state = fields.Char(string='Company State', tracking=True)
+    location = fields.Char(string="Specific Location")
     phone_number = fields.Char(string="Phone Number")
 
 
